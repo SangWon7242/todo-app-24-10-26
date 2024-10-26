@@ -74,9 +74,7 @@ const TodoWriteScreen = ({ navigation }) => {
 };
 
 const DetailScreen = ({ navigation, route }) => {
-  const { todo } = route.params;
-
-  console.log(todo);
+  const todo = route.params?.todo;
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -98,8 +96,30 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#f4511e",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+          headerRight: () => (
+            <Pressable onPress={() => alert("클릭됨!!")}>
+              <Text style={{ color: "#fff", fontWeight: "bold" }}>Menu</Text>
+            </Pressable>
+          ),
+        }}
+      >
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            title: "메인 홈",
+          }}
+        />
         <Stack.Screen name="TodoWrite" component={TodoWriteScreen} />
         <Stack.Screen name="Details" component={DetailScreen} />
       </Stack.Navigator>
