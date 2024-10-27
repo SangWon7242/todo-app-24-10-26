@@ -23,6 +23,21 @@ export default function App() {
 
       return <IconComponent name={iconName} size={size} color={color} />;
     },
+    headerTitleAlign: "center",
+    headerTitleStyle: {
+      fontSize: 23,
+      fontWeight: "bold",
+    },
+    headerStyle: {
+      // Android
+      elevation: 8,
+
+      // ios
+      shadowColor: "#000",
+      shadowOpacity: 0.3,
+      shadowOffset: { width: 0, height: 2 },
+      shadowRadius: 4,
+    },
     tabBarLabelStyle: {
       fontSize: 12,
       paddingBottom: 10,
