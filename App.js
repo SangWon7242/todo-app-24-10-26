@@ -30,7 +30,6 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const todosState = useTodosState();
-  console.log(todosState);
 
   const screenOptions = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
