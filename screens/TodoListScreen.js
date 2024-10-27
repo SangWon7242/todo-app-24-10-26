@@ -1,8 +1,9 @@
 import { Text, View, StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
+import TodosContext from "../components/TodosProvider";
 
 const TodoListScreen = ({ route }) => {
-  const { todos } = route.params?.todosState || { todos: [] };
+  const { todos } = useContext(TodosContext);
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
     width: "90%",
     padding: 10,
     borderRadius: 10,
+    marginTop: 5,
   },
 });
 

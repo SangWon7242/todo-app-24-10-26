@@ -6,12 +6,12 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import TodosContext from "../components/TodosProvider";
 
-const TodoWriteScreen = ({ navigation, route }) => {
+const TodoWriteScreen = ({ navigation }) => {
   const [todo, setTodo] = useState("");
-
-  const { addTodo } = route.params.todosState;
+  const { addTodo } = useContext(TodosContext);
 
   const headleAddTodo = () => {
     if (!todo.trim()) {
