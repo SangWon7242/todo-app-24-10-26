@@ -1,4 +1,12 @@
-import { Text, View, StyleSheet, Pressable, Alert, Modal } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  Alert,
+  Modal,
+  TextInput,
+} from "react-native";
 import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon } from "@rneui/themed";
@@ -87,9 +95,14 @@ const TodoListScreen = ({ route }) => {
         }}
       >
         <Pressable onPress={closeModifyModal} style={styles.modalContainer}>
-          <View style={styles.modalBox}>
-            <Text style={{ fontSize: 30 }}>수정창</Text>
-          </View>
+          <Pressable style={styles.modalBox}>
+            <View style={styles.modalInner}>
+              <TextInput
+                style={styles.modifyInput}
+                placeholder="수정할 일을 입력해주세요."
+              />
+            </View>
+          </Pressable>
         </Pressable>
       </Modal>
     </View>
@@ -126,6 +139,10 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 10,
     backgroundColor: "#fff",
+  },
+  modifyInput: {
+    padding: 10,
+    fontSize: 20,
   },
 });
 
