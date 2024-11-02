@@ -40,7 +40,10 @@ export const TodosProvider = ({ children }) => {
     setTodos(newTodos);
   };
 
-  const removeTodo = (id) => {};
+  const removeTodo = (id) => {
+    const newTodos = todos.filter((todo) => todo.id != id);
+    setTodos(newTodos);
+  };
 
   return (
     <TodosContext.Provider value={{ todos, addTodo, removeTodo }}>
