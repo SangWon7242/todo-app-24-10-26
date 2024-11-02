@@ -1,10 +1,20 @@
-import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
-import React, { useContext } from "react";
+import { Text, View, StyleSheet, Pressable, Alert, Modal } from "react-native";
+import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon } from "@rneui/themed";
 
 const TodoListScreen = ({ route }) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const { todos, removeTodo } = useContext(TodosContext);
+
+  const openModifyModal = (reset) => {
+    reset();
+    setModalVisible(true);
+  };
+
+  const closeModifyModal = () => {
+    setModalVisible(false);
+  };
 
   const headleRemoveTodo = (id, reset) => {
     Alert.alert(
@@ -34,11 +44,12 @@ const TodoListScreen = ({ route }) => {
         todos.map((todo) => (
           <View key={todo.id} style={{ marginTop: 5 }}>
             <ListItem.Swipeable
+              bottomDivider
               style={styles.listBox}
               leftContent={(reset) => (
                 <Pressable
                   style={{ ...styles.pressableBtn, backgroundColor: "blue" }}
-                  onPress={() => reset()}
+                  onPress={() => openModifyModal(reset)}
                 >
                   <Icon name="update" color="white" />
                   <Text style={styles.btnText}>수정</Text>
@@ -67,6 +78,20 @@ const TodoListScreen = ({ route }) => {
           할 일이 없습니다.
         </Text>
       )}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <Pressable onPress={closeModifyModal} style={styles.modalContainer}>
+          <View style={styles.modalBox}>
+            <Text style={{ fontSize: 30 }}>수정창</Text>
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 };
@@ -88,6 +113,19 @@ const styles = StyleSheet.create({
   btnText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalBox: {
+    width: "80%",
+    minHeight: 250,
+    borderWidth: 3,
+    borderRadius: 10,
+    backgroundColor: "#fff",
   },
 });
 
