@@ -45,8 +45,16 @@ export const TodosProvider = ({ children }) => {
     setTodos(newTodos);
   };
 
+  const modifyTodo = (id, newContent) => {
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, content: newContent } : todo
+    );
+
+    setTodos(newTodos);
+  };
+
   return (
-    <TodosContext.Provider value={{ todos, addTodo, removeTodo }}>
+    <TodosContext.Provider value={{ todos, addTodo, removeTodo, modifyTodo }}>
       {children}
     </TodosContext.Provider>
   );
