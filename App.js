@@ -2,20 +2,15 @@ import { StyleSheet, View, Text, StatusBar, Dimensions } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import tabConfig from "./configs/tabConfig";
 import { TodosProvider } from "./components/TodosProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
-import * as SplashScreen from "expo-splash-screen";
-import * as Font from "expo-font";
+import AppLoadingContext, {
+  AppLoadingProvider,
+} from "./components/AppLoadingProvider";
 
 const { width, height } = Dimensions.get("window");
-
-const fetchFonts = () => {
-  return Font.loadAsync({
-    "gmarketsans-font": require("./assets/fonts/GmarketSansTTFMedium.ttf"),
-  });
-};
 
 const CustomHeader = ({ title }) => {
   return (
@@ -33,27 +28,8 @@ const CustomHeader = ({ title }) => {
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-export default function App() {
-  const [fontsLoaded, setFontLoaded] = useState(false);
-
-  useEffect(() => {
-    const loadFonts = async () => {
-      try {
-        await fetchFonts(); // 폰트 로드
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      } catch (e) {
-        console.warn(e); // 폰트 로드 중 오류 발생시 경고
-      } finally {
-        setFontLoaded(true);
-        await SplashScreen.hideAsync(); // 폰트 로드가 완료되면 스플래시 스크린을 숨겨줌
-      }
-    };
-
-    // 스플래시 스크린이 자동으로 숨겨지지 않도록 설정
-    SplashScreen.preventAutoHideAsync();
-
-    loadFonts();
-  }, []);
+const AppWithNavigation = () => {
+  const { fontsLoaded } = useContext(AppLoadingContext);
 
   if (!fontsLoaded) {
     return null;
@@ -101,23 +77,31 @@ export default function App() {
   });
 
   return (
-    <TodosProvider>
-      <NavigationContainer>
-        <Tab.Navigator screenOptions={screenOptions}>
-          {tabConfig.map((routeConfig) => (
-            <Tab.Screen
-              key={routeConfig.name}
-              name={routeConfig.name}
-              component={routeConfig.component}
-              options={{
-                title: routeConfig.title,
-                header: () => <CustomHeader title={routeConfig.title} />,
-              }}
-            />
-          ))}
-        </Tab.Navigator>
-      </NavigationContainer>
-    </TodosProvider>
+    <NavigationContainer>
+      <Tab.Navigator screenOptions={screenOptions}>
+        {tabConfig.map((routeConfig) => (
+          <Tab.Screen
+            key={routeConfig.name}
+            name={routeConfig.name}
+            component={routeConfig.component}
+            options={{
+              title: routeConfig.title,
+              header: () => <CustomHeader title={routeConfig.title} />,
+            }}
+          />
+        ))}
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default function App() {
+  return (
+    <AppLoadingProvider>
+      <TodosProvider>
+        <AppWithNavigation />
+      </TodosProvider>
+    </AppLoadingProvider>
   );
 }
 
