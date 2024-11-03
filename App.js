@@ -2,12 +2,23 @@ import { StyleSheet, View, Text, StatusBar, Dimensions } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import tabConfig from "./configs/tabConfig";
 import { TodosProvider } from "./components/TodosProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as SplashScreen from "expo-splash-screen";
+import * as Font from "expo-font";
 
 const { width, height } = Dimensions.get("window");
+
+// 스플래시 스크린이 자동으로 숨겨지지 않도록 설정
+SplashScreen.preventAutoHideAsync();
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    "gmarketsans-font": require("./assets/fonts/GmarketSansTTFMedium.ttf"),
+  });
+};
 
 const CustomHeader = ({ title }) => {
   return (
@@ -26,6 +37,27 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [fontsLoaded, setFontLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      try {
+        await fetchFonts(); // 폰트 로드
+      } catch (e) {
+        console.warn(e); // 폰트 로드 중 오류 발생시 경고
+      } finally {
+        setFontLoaded(true);
+        SplashScreen.hideAsync(); // 폰트 로드가 완료되면 스플래시 스크린을 숨겨줌
+      }
+    };
+
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   const screenOptions = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
       const routeConfig = tabConfig.find(
@@ -58,6 +90,7 @@ export default function App() {
       fontSize: 12,
       paddingBottom: 10,
       fontWeight: "bold",
+      fontFamily: "gmarketsans-font",
     },
     tabBarStyle: {
       height: "8%",
