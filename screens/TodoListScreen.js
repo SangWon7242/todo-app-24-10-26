@@ -13,12 +13,14 @@ import {
 } from "react-native";
 import React, { useState, useContext } from "react";
 import TodosContext from "../components/TodosProvider";
+import AppLoadingContext from "../components/AppLoadingProvider";
 import { ListItem, Icon } from "@rneui/themed";
 
 const { width, height } = Dimensions.get("window");
 
 const TodoListItem = ({ todo, onModifyTodo, onRemoveTodo }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { fontsLoaded } = useContext(AppLoadingContext);
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -223,6 +225,7 @@ const styles = StyleSheet.create({
   modifyInput: {
     padding: 10,
     fontSize: 20,
+    fontFamily: "gmarketsans-font",
   },
   modalBtnBox: {
     paddingVertical: 20,
@@ -235,6 +238,7 @@ const styles = StyleSheet.create({
   modalBtnText: {
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: "gmarketsans-font",
   },
 });
 
