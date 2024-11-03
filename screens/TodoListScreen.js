@@ -14,11 +14,17 @@ import TodosContext from "../components/TodosProvider";
 import { ListItem, Icon } from "@rneui/themed";
 
 const TodoListItem = ({ todo, onModifyTodo, onRemoveTodo }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <View
       style={{
-        marginVertical: 5, // margin Y축
-        marginHorizontal: 10, // margin X축
+        marginVertical: "1%", // margin Y축
+        marginHorizontal: "1.5%", // margin X축
         borderWidth: 2,
         borderRadius: 10,
         overflow: "hidden",
@@ -48,8 +54,12 @@ const TodoListItem = ({ todo, onModifyTodo, onRemoveTodo }) => {
       >
         <ListItem.Content>
           <ListItem.Title>번호 : {todo.id}</ListItem.Title>
-          <ListItem.Subtitle>작성 날짜 : {todo.regDate}</ListItem.Subtitle>
-          <ListItem.Subtitle>할 일: {todo.content}</ListItem.Subtitle>
+          <Text>작성 날짜 : {todo.regDate}</Text>
+          <Pressable onPress={toggleExpand} style={styles.contentBox}>
+            <Text numberOfLines={isExpanded ? null : 2} ellipsizeMode="tail">
+              할 일: {todo.content}
+            </Text>
+          </Pressable>
         </ListItem.Content>
       </ListItem.Swipeable>
     </View>
