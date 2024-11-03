@@ -44,7 +44,7 @@ export default function App() {
       fontWeight: "bold",
     },
     tabBarStyle: {
-      height: 60,
+      height: "8%",
     },
     tabBarInactiveTintColor: "#0163d2",
     tabBarActiveTintColor: "black",
